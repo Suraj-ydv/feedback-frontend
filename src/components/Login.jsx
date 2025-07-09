@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,13 +25,6 @@ export default function Login() {
     alert(response.data.message);
   }
 
-
-
-
-
-
-
-
   function onEmailChange(e) {
     setEmail(e.target.value);
   }
@@ -38,7 +32,8 @@ export default function Login() {
     setPassword(e.target.value);
   }
   return (
-    <div>
+    <div className="form-box">
+      <h2>Login to Your Account</h2>
       <form onSubmit={onFormLogin}>
         <input
           type="email"
@@ -54,8 +49,8 @@ export default function Login() {
         />
         <button type="submit">Login</button>
       </form>
-      <p>
-        Dont you have any account please <a href="/"> Register</a>
+      <p style={{ marginTop: "1rem", textAlign: "center" }}>
+        Don’t have an account? <a href="/">Register</a>
       </p>
     </div>
   );

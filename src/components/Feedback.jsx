@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from "react";
 import axios from "axios";
+import "../App.css";
 
 export default function Feedback() {
   const [name, setName] = useState("");
@@ -8,13 +9,23 @@ export default function Feedback() {
 
   async function onFormSubmit(e) {
     e.preventDefault();
-    //make a request to server post api ,localhost:3000/feedback
-    const response = await axios.post("https://feedback-backend-zwut.onrender.com/feedback", {
-      name,
-      message,
-    });
-    console.log(response.data);
-    alert(response.data);
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.post(
+        "https://feedback-backend-zwut.onrender.com/feedback",
+        { name, message },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(response.data.message || "Feedback submitted!");
+    } catch (err) {
+      alert(
+        err.response?.data?.message || "Failed to submit feedback. Please login."
+      );
+    }
   }
   function onNameChange(e) {
     setName(e.target.value);
@@ -25,12 +36,16 @@ export default function Feedback() {
   }
 
   return (
-    <div>
+    <div className="form-box">
+      <h2>Submit Your Feedback</h2>
       <form onSubmit={onFormSubmit}>
-        <input type="text" placeholder="name" onChange={onNameChange} />
         <input
           type="text"
-          placeholder="enter message"
+          placeholder="Name"
+          onChange={onNameChange}
+        />
+        <textarea
+          placeholder="Enter your message..."
           onChange={onMessageChange}
         />
         <button type="submit">Submit</button>
